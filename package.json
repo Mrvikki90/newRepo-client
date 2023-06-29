@@ -15,6 +15,7 @@
     "@types/config": "^3.3.0",
     "antd": "^5.1.7",
     "axios": "^1.2.2",
+    "crypto-js": "^4.1.1",
     "lodash": "^4.17.21",
     "mdb-react-ui-kit": "^6.1.0",
     "moment": "^2.29.4",

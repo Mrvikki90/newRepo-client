@@ -6,10 +6,6 @@ import {
   MDBBtn,
   MDBIcon,
   MDBInput,
-  MDBModal,
-  MDBModalBody,
-  MDBModalHeader,
-  MDBAlert,
 } from "mdb-react-ui-kit";
 import {
   FormControl,

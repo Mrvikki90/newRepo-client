@@ -19,7 +19,7 @@ const ForgetPasswordModal = ({ isOpen, onClose, setShowAlert }) => {
   const handleForgetPasswordSubmit = async (e) => {
     e.preventDefault();
     const response = await axios.post(
-      "http://localhost:5500/api/forget-password-mail",
+      "https://socket-chat-app-3v3p.onrender.com/api/forget-password-mail",
       { email: email }
     );
     if (response.status === 200) {

@@ -4,6 +4,7 @@ import HomePage from "../components/Homepage/ChatHomePage";
 import PrivateRoutes from "../hoc/privateRoutes";
 import Login from "../components/Auth/login/LoginNew";
 import SignUp from "../components/Auth/signup/signupNew";
+import ResetPasswordPage from "../components/reset-password/resetPassword";
 
 const Router = () => {
   return (
@@ -15,6 +16,7 @@ const Router = () => {
         <Route path="/" element={<Login />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signup" element={<SignUp />}></Route>
+        <Route path="/reset-password" element={<ResetPasswordPage />}></Route>
       </Routes>
     </>
   );

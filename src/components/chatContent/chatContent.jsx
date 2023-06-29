@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import ChatItem from "./chatItems";
 import "./chatcontent.css";
 import Avatar from "../chatlist/Avatar";
@@ -12,6 +12,18 @@ const ChatContent = ({
   msg,
 }) => {
   const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [userMessages]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [msg]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <div className="main__chatcontent">

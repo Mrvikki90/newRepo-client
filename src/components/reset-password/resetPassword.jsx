@@ -62,7 +62,7 @@ const ResetPasswordPage = () => {
             theme: "light",
           });
           return setTimeout(() => {
-            navigate("/home");
+            navigate("/");
           }, 3000);
         }
       } else {

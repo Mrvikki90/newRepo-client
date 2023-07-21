@@ -10,8 +10,11 @@ const ChatContent = ({
   chatUserName,
   setMsg,
   msg,
+  isNewChat,
+  hasNewMessage,
 }) => {
   const messagesEndRef = useRef(null);
+  const chatContentRef = useRef();
 
   useEffect(() => {
     scrollToBottom();
@@ -21,12 +24,21 @@ const ChatContent = ({
     scrollToBottom();
   }, [msg]);
 
+  useEffect(() => {
+    // Scroll to the bottom of the chat content when a new chat is started or a new message arrives
+    if (isNewChat || hasNewMessage) {
+      chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
+    }
+  }, [isNewChat, hasNewMessage]);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // console.log("userMessages", userMessages);
+
   return (
-    <div className="main__chatcontent">
+    <div className="main__chatcontent" ref={chatContentRef}>
       <div className="content__header">
         <div className="blocks">
           <div className="current-chatting-user">

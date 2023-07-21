@@ -1,7 +1,10 @@
 import React from "react";
+import { SERVE_STATIC_IMAGES_PATH } from "../constants/constant";
+import _ from "lodash";
 import "./userprofile.css";
+import { Flex, Avatar, Text, VStack } from "@chakra-ui/react";
 
-const UserProfile = () => {
+const UserProfile = ({ allUsers, filterUsers, currentUser }) => {
   const toggleInfo = (e) => {
     e.target.parentNode.classList.toggle("open");
   };
@@ -9,21 +12,21 @@ const UserProfile = () => {
   return (
     <div className="main__userprofile">
       <div className="profile__card user__profile__image">
-        <div className="profile__image">
-          <img src="https://pbs.twimg.com/profile_images/1116431270697766912/-NfnQHvh_400x400.jpg" />
-        </div>
-        <h4>Fernando Faucho</h4>
-        <p>CEO & Founder at Highly Inc</p>
-      </div>
-      <div className="profile__card">
-        <div className="card__header" onClick={toggleInfo}>
-          <h4>Information</h4>
-          <i className="fa fa-angle-down"></i>
-        </div>
-        <div className="card__content">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-          ultrices urna a imperdiet egestas. Donec in magna quis ligula
-        </div>
+        <VStack spacing={4} align="start">
+          {allUsers.map((item) => {
+            return item._id !== currentUser &&
+              !_.includes(filterUsers, item.currentUser) ? (
+              <Flex alignItems="center" gap="2">
+                <Avatar
+                  size="sm"
+                  name="Dan Abrahmov"
+                  // src={`${SERVE_STATIC_IMAGES_PATH}${item.profileImg}`}
+                />
+                <Text>{item.name}</Text>
+              </Flex>
+            ) : null;
+          })}
+        </VStack>
       </div>
     </div>
   );

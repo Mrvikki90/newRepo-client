@@ -3,18 +3,6 @@
     padding: 0 40px 0 0px;
 }
 
-.chatlist__heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.chatlistadd {
-    background-color: 3px solid white;
-    display: flex;
-}
-
 .align-div {
     display: flex;
     flex-direction: column;
@@ -61,6 +49,7 @@
     margin-top: 30px;
     overflow: auto;
     max-height: calc(100vh - calc(100vh / 2));
+
 }
 
 .chatlist__item {
@@ -74,19 +63,12 @@
     transform: scale(0);
     animation-name: showIn;
     animation-duration: 0.2s;
-    /* or: Xms */
     animation-iteration-count: 1;
     animation-direction: normal;
-    /* or: normal */
-    animation-timing-function: cubic-bezier(0.88,
-            0.19,
-            0.37,
-            1.11);
-    /* or: ease, ease-in, ease-in-out, linear, cubic-bezier(x1, y1, x2, y2) */
+    animation-timing-function: cubic-bezier(0.88, 0.19, 0.37, 1.11);
     animation-fill-mode: both;
-    /* or: backwards, both, none */
     animation-delay: 0.1s;
-    /* or: Xms */
+
 }
 
 @keyframes showIn {
@@ -107,7 +89,6 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-
     margin-right: 20px;
     position: relative;
 }
@@ -117,7 +98,12 @@
     object-fit: cover;
 }
 
-.chatlist__item .userMeta p {
+.userMeta {
+    position: relative;
+}
+
+
+.userMeta p {
     margin: 0;
     padding: 0;
     color: #000;
@@ -125,7 +111,7 @@
     font-size: 14px;
 }
 
-.chatlist__item .userMeta span {
+.userMeta span {
     margin: 0;
     padding: 0;
     color: #ceccd3;
@@ -137,7 +123,6 @@
 .chatlist__item:hover,
 .chatlist__item.active {
     background: #fff;
-
     border-radius: 10px;
 }
 
@@ -145,7 +130,6 @@
     position: absolute;
     width: 10px;
     height: 10px;
-    position: absolute;
     bottom: 0;
     right: 0;
     background-color: #ddd;
@@ -162,4 +146,110 @@
     border-radius: 50%;
     width: 100%;
     height: 100%;
+}
+
+.unseenMessageContainer {
+    display: flex;
+    align-items: center;
+}
+
+.unseenMessageText {
+    color: #A8A8A8 !important;
+    /* Updated color */
+    font-weight: bold;
+    margin: 0;
+}
+
+.unseenMessageBadge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: green;
+    border-radius: 50%;
+    margin-left: 85%;
+    padding: 10px
+        /* Updated margin from left to right */
+}
+
+.unseenMessageCount {
+    color: white;
+    font-weight: bold;
+    margin: 0;
+}
+
+
+
+/* New styles for the dot */
+.dot {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 25px;
+}
+
+.dot span {
+    height: 20px;
+    width: 4px;
+    background-color: #a0a0a0;
+    /* Use a lighter color for the dots */
+    border-radius: 80%;
+    margin: 2px;
+    z-index: 10;
+}
+
+.dot span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.dot span:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.dot span:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 1.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Popup Styles */
+.popup {
+    position: absolute;
+    top: 10 px;
+    /* Adjust the top position based on your design */
+    right: 10px;
+    /* Adjust the right position based on your design */
+    background-color: #F5F5F5;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+    border-radius: 10%;
+}
+
+.popup p {
+    margin: 0;
+    padding: 8px;
+    cursor: pointer;
+}
+
+/* Hide the popup by default */
+.popup {
+    display: none;
+}
+
+/* Show the popup when the showPopup state is true */
+.popup.show {
+    display: block;
 }

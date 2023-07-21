@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import loginSchema from "../../../Schema/loginSchema";
 import ForgetPasswordModal from "../../modals/forgetPasswordModal";
+import { BASE_URL } from "../../constants/constant";
 
 function App() {
   const navigate = useNavigate();
@@ -44,6 +45,17 @@ function App() {
     setShowAlert(false);
   };
 
+  // Function to fetch the last selected chat for the logged-in user
+  const fetchLastSelectedChat = async (userId) => {
+    try {
+      const response = await axios.get(`/api/get-last-selected-chat/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.log("Error:", error);
+      return null;
+    }
+  };
+
   const {
     register,
     handleSubmit,
@@ -56,16 +68,17 @@ function App() {
 
   const handleLogin = async (data) => {
     try {
-      const response = await axios.post(
-        "https://socket-chat-app-3v3p.onrender.com/api/login",
-        {
-          data,
-        }
-      );
+      const response = await axios.post(`${BASE_URL}/api/login`, {
+        data,
+      });
       reset();
       localStorage.setItem("token", response.data.token);
       if (response.status === 200) {
-        navigate("/home", { state: response.data });
+        const userId = response.data.user._id;
+        // Fetch the last selected chat data for the logged-in user
+        const lastChat = await fetchLastSelectedChat(userId);
+
+        navigate("/home", { state: { ...response.data, lastChat } });
         return toast(`${response.data.message}`, {
           position: "top-right",
           autoClose: 1000,

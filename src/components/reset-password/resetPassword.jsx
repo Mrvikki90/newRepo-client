@@ -33,7 +33,6 @@ const ResetPasswordPage = () => {
       const emailParts = decryptedEmail.split("|");
       const decryptedEmailSlice = emailParts[0];
       setEmail(decryptedEmailSlice);
-      console.log("Decrypted Email:", decryptedEmailSlice);
     }
   }, [encryptedData]);
 

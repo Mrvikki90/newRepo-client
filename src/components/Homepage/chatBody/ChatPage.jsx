@@ -7,6 +7,7 @@ import "./chatbody.css";
 import axios from "axios";
 import _ from "lodash";
 import { io } from "socket.io-client";
+import { BASE_URL } from "../../constants/constant";
 
 const ChatPage = () => {
   const location = useLocation();
@@ -19,11 +20,14 @@ const ChatPage = () => {
   const [userMessages, setMessages] = useState([]);
   const [msg, setMsg] = useState();
   const [chatUserName, setChatUserName] = useState();
+  const [isNewChat, setIsNewChat] = useState(false); // New state to track new chats
+  const [hasNewMessage, setHasNewMessage] = useState(false);
 
   // Check if the socket ID is stored in localStorage
   const {
     user,
     user: { _id },
+    lastChat,
     // user: { profileImg },
   } = location.state;
 
@@ -31,14 +35,11 @@ const ChatPage = () => {
   const isFirstRun = useRef(true);
 
   // Connect to the socket server using the stored socket ID or generate a new one
-  const socket = io("https://socket-chat-app-3v3p.onrender.com");
+  const socket = io(BASE_URL);
 
   useEffect(() => {
     if (isFirstRun.current) {
-      console.log("socketStart");
-      socket.on("connect", () => {
-        console.log("Connected to server", socket);
-      });
+      socket.on("connect", () => {});
       isFirstRun.current = false;
     }
   }, [socket]);
@@ -48,13 +49,16 @@ const ChatPage = () => {
     // Set the mounted state to true
     isMountedRef.current = true;
     const handleReceiveMessage = (data) => {
-      console.log("arrival message :", data);
       if (isMountedRef.current) {
         setArrivalMessage({
           sender: data.senderId,
           text: data.text,
           createdAt: Date.now(),
         });
+
+        if (currentChat?.members.includes(data.senderId)) {
+          setHasNewMessage(true);
+        }
       }
     };
     // Attach the event listener
@@ -73,17 +77,14 @@ const ChatPage = () => {
   }, [arrivalMessage, currentChat]);
 
   useEffect(() => {
-    console.log("add user useEffect runs", user._id);
     socket.emit("addUser", user._id);
   }, []);
 
   useEffect(() => {
     const getConversation = async () => {
       try {
-        const res = await axios.get(
-          `https://socket-chat-app-3v3p.onrender.com/conversation/${_id}`
-        );
-
+        // const receiverId = currentChat.members.find((m) => m !== _id);
+        const res = await axios.get(`${BASE_URL}/conversation/${_id}/null`);
         setConversations(res.data);
       } catch (error) {
         console.log(error);
@@ -108,9 +109,7 @@ const ChatPage = () => {
 
   useEffect(() => {
     const getAllUsers = async () => {
-      const res = await axios.get(
-        "https://socket-chat-app-3v3p.onrender.com/api/allUsers"
-      );
+      const res = await axios.get(`${BASE_URL}/api/allUsers`);
       setAllUsers(res.data);
     };
     getAllUsers();
@@ -119,9 +118,7 @@ const ChatPage = () => {
   useEffect(() => {
     const getMessages = async () => {
       try {
-        const res = await axios.get(
-          `https://socket-chat-app-3v3p.onrender.com/messages/${currentChat._id}`
-        );
+        const res = await axios.get(`${BASE_URL}/messages/${currentChat._id}`);
         setMessages(res.data);
       } catch (error) {
         console.log(error);
@@ -131,30 +128,27 @@ const ChatPage = () => {
   }, [currentChat]);
 
   const sendMessages = async () => {
-    const message = {
-      conversationId: currentChat._id,
-      sender: _id,
-      text: msg,
-    };
     const receiverId = currentChat.members.find((m) => m !== _id);
     try {
       socket.emit("sendMessage", {
+        conversationId: currentChat._id,
         senderId: _id,
         receiverId: receiverId,
         text: msg,
       });
+
+      // Update messages in the frontend directly with the message sent via the socket
+      const newMessage = {
+        conversationId: currentChat._id,
+        sender: _id,
+        text: msg,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      setMessages([...userMessages, newMessage]);
     } catch (error) {
       console.log("error while sending message", error);
-    }
-
-    try {
-      const res = await axios.post(
-        "https://socket-chat-app-3v3p.onrender.com/messages",
-        message
-      );
-      setMessages([...userMessages, res.data]);
-    } catch (error) {
-      console.log(error);
     }
     return setMsg("");
   };
@@ -165,6 +159,10 @@ const ChatPage = () => {
         setChatUserName={setChatUserName}
         setCurrentChat={setCurrentChat}
         currentUser={_id}
+        allUsers={allUsers}
+        currentChat={currentChat}
+        setIsNewChat={setIsNewChat}
+        isNewChat={isNewChat}
       />
 
       <ChatContent
@@ -175,8 +173,14 @@ const ChatPage = () => {
         chatUserName={chatUserName}
         setMsg={setMsg}
         msg={msg}
+        isNewChat={isNewChat}
+        hasNewMessage={hasNewMessage}
       />
-      <UserProfile />
+      <UserProfile
+        allUsers={allUsers}
+        filterUsers={filterUsers}
+        currentUser={_id}
+      />
     </div>
   );
 };

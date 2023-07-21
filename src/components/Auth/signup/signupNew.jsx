@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import userSchema from "../../../Schema/FormSchema";
 import "./page.css";
+import { BASE_URL } from "../../constants/constant";
 
 const SignupNew = () => {
   const {
@@ -37,10 +38,7 @@ const SignupNew = () => {
 
     console.log(formData);
 
-    const response = await axios.post(
-      "https://socket-chat-app-3v3p.onrender.com/api/post",
-      formData
-    );
+    const response = await axios.post(`${BASE_URL}/api/post`, formData);
     reset();
     if (response.status === 200) {
       return toast(response.data.message, {
@@ -108,7 +106,18 @@ const SignupNew = () => {
                   {errors && errors.password?.message}
                 </FormErrorMessage>
               </FormControl>
-
+              <FormControl isInvalid={errors.profileImg}>
+                <MDBInput
+                  wrapperClass="mb-2 mt-2"
+                  id="formControlLg"
+                  {...register("profileImg")}
+                  type="file"
+                  placeholder="upload image"
+                />
+                <FormErrorMessage>
+                  {errors && errors.profileImg?.message}
+                </FormErrorMessage>
+              </FormControl>
               <div className="d-flex justify-content-between mx-4 mb-4">
                 <MDBCheckbox
                   name="flexCheck"
@@ -119,7 +128,7 @@ const SignupNew = () => {
                 <a href="!#">Forgot password?</a>
               </div>
 
-              <MDBBtn className="mb-4 w-100" size="lg">
+              <MDBBtn className="mb-4 w-100" size="lg" type="submit">
                 Sign in
               </MDBBtn>
 

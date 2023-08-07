@@ -16,6 +16,7 @@ const ChatPage = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [filterUsers, setFilterUsers] = useState();
   const [currentChat, setCurrentChat] = useState();
+  const [currentGroup, setCurrentGroup] = useState();
   const [arrivalMessage, setArrivalMessage] = useState();
   const [userMessages, setMessages] = useState([]);
   const [msg, setMsg] = useState();
@@ -43,6 +44,9 @@ const ChatPage = () => {
       isFirstRun.current = false;
     }
   }, [socket]);
+
+  console.log("currentchat", currentChat);
+  console.log("currentGroup", currentGroup);
 
   useEffect(() => {
     console.log("arrival use effect");
@@ -163,6 +167,7 @@ const ChatPage = () => {
         currentChat={currentChat}
         setIsNewChat={setIsNewChat}
         isNewChat={isNewChat}
+        setCurrentGroup={setCurrentGroup}
       />
 
       <ChatContent

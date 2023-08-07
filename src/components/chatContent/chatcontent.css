@@ -124,7 +124,10 @@
 }
 
 .content__footer {
-    padding-top: 30px;
+    position: fixed;
+    bottom: 18%;
+    width: 41%;
+    border-radius: 8px;
 }
 
 .sendNewMessage {
@@ -170,4 +173,18 @@
 #sendMsgBtn {
     background-color: #3b5bfe;
     color: #fff;
+}
+
+.no-messages {
+    position: relative;
+    font-size: 40px;
+    line-height: 0.8em;
+}
+
+.no-messages h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Move the div to center */
 }

@@ -60,8 +60,8 @@ const ChatContent = ({
       </div>
       <div className="content__body">
         <div className="chat__items">
-          {userMessages.map((itm, index) => {
-            return (
+          {userMessages.length > 0 ? (
+            userMessages.map((itm, index) => (
               <ChatItem
                 animationDelay={index + 2}
                 key={itm._id}
@@ -69,8 +69,12 @@ const ChatContent = ({
                 loginId={loginId}
                 msg={itm.text}
               />
-            );
-          })}
+            ))
+          ) : (
+            <div className="chat__item__content no-messages">
+              <h1>Please send a message to start the conversation.</h1>
+            </div>
+          )}
 
           <div ref={messagesEndRef} />
         </div>
